@@ -1,2 +1,2 @@
 
-function changeText(newString){document.getElementById("text").textBox.innerHTML = newString}
+function changeText(newString){document.getElementById("text").innerHTML = newString}
