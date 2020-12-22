@@ -3,9 +3,18 @@
 <head>
     <link rel="stylesheet" href="./style.css">
     <script src="./script.js"></script>
+    <script src="./list.js"></script>
 </head>
-<body onload="">
+<body onload="setDefaultDate()">
     <p id ="text"> Hello </p>
-
+    <select name = "class" id = "class">
+        <option value="undefined" selected disabled>Classes</option>
+        <option value="0">Geometry</option>
+        <option value="1">Chemestry</option>
+        <option value="2">Poetry</option>
+    </select>
+    <input type="date" id="date" name="birthday">
+    <button id ="submit" onclick= "document.getElementById('note').innerHTML = sub()">Search</button>
+    <p id = "note"></p>
 </body>
 </html>
