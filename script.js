@@ -17,12 +17,16 @@ function setDefaultDate(){
 }
 
 function getNote(findDate, findClass){
+    let output = "";
+    let numOfReturns = 1;
     for(let i=0; i < notes.length; i++){
         if(findDate == notes[i][0]){
             if(findClass == notes[i][1]){
-                return notes[i][2]
+                output =  output  + "<br>" + numOfReturns + ". " + notes[i][2];
+                numOfReturns++
             }
         }
     }
-    return "No notes for that class date pair"
+    if (output == "") {output = "No notes for that class date pair &#128078"};
+    return output;
 }
