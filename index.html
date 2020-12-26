@@ -6,15 +6,35 @@
     <script src="./list.js"></script>
 </head>
 <body onload="setDefaultDate()">
-    <p id ="text"> Hello! Please select a date and class</p>
-    <select name = "class" id = "class">
-        <option value="undefined" selected disabled>Classes</option>
-        <option value="0">Geometry</option>
-        <option value="1">Chemestry</option>
-        <option value="2">Poetry</option>
-    </select>
-    <input type="date" id="date">
-    <button id ="submit" onclick= "document.getElementById('note').innerHTML = sub()">Search</button>
-    <p id = "note"></p>
+
+
+
+    <p><b>Hello! Here you can look up old notes (12/22/2020)!</b></p>
+        <select id = "classOut">
+            <option value="undefined" selected disabled>Classes</option>
+            <option value="0">Geometry</option>
+            <option value="1">Chemestry</option>
+            <option value="2">Poetry</option>
+        </select>
+    <input type="date" id="dateOut">
+    <button id ="submitOut" onclick= "document.getElementById('noteOut').innerHTML = subOut()">Search</button>
+    <p id = "noteOut"></p>
+    <br>
+    <br>
+    <br>
+    <p> <b>Hello! Here you can write new notes!</b></p>
+        <select id = "classIn">
+            <option value="undefined" selected disabled>Classes</option>
+            <option value="0">Geometry</option>
+            <option value="1">Chemestry</option>
+            <option value="2">Poetry</option>
+        </select>
+    <input type="date" id="dateIn">
+    <input id = "noteIn">
+    <button id ="submitIn" onclick= "subIn()">Submit</button>
+    <p id="errorIn"></p>
+
+
+
 </body>
 </html>
