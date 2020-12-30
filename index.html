@@ -2,11 +2,10 @@
 <html>
 <head>
     <link rel="stylesheet" href="./style.css">
-    <script src="./script.js"></script>
-    <script src="./list.js"></script>
+    <script src="./script.js" defer></script>
 </head>
 <body onload="setDefaultDate()">
-    <p><b>Hello! Here you can look up old notes.</b></p>
+    <!--<p><b>Hello! Here you can look up old notes.</b></p>
         <select id = "classOut">
             <option value="undefined" selected disabled>Classes</option>
             <option value="0">Math</option>
@@ -24,25 +23,43 @@
     <button id ="submitOut" onclick= "document.getElementById('noteOut').innerHTML = subOut()">Search</button>
     <p id = "noteOut"></p>
     <br>
+    <br> -->
+    <ul>
+
+    </ul>
     <br>
-    <br>
-    <p> <b>Hello! Here you can write new notes!</b></p>
-        <select id = "classIn">
-            <option value="undefined" selected disabled>Classes</option>
-            <option value="0">Math</option>
-            <option value="1">Science</option>
-            <option value="2">English</option>
-            <option value="3">History</option>
-            <option value="4">Language</option>
-            <option value="5">Art</option>
-            <option value="6">Computer Science</option>
-            <option value="7">Robotics</option>
-            <option value="8">Math Team</option>
-            <option value="9">Health</option>
-        </select>
-    <input type="date" id="dateIn">
-    <input id = "noteIn">
-    <button id ="submitIn" onclick= "subIn()">Submit</button>
-    <p id="errorIn"></p>
+    <section class="new-note">
+      <h2>Hello! Here you can write new notes!</h2>
+      <form>
+        <div>
+          <label for="date">Note date</label>
+          <input class="date" type="date" required>
+        </div>
+        <div>
+          <label for="class">Class</label>
+          <select class="class" required>
+            <option value="Art">Art</option>
+            <option value="Computer Science">Computer Science</option>
+            <option value="English">English</option>
+            <option value="Health">Health</option>
+            <option value="History">History</option>
+            <option value="Language">Language</option>
+            <option value="Math">Math</option>
+            <option value="Math Team">Math Team</option>
+            <option value="Robotics">Robotics</option>
+            <option value="Science">Science</option>        
+          </select>
+        </div>
+        <div>
+          <label for="note">Note text</label>
+          <input class="note" type="text" required>
+        </div>
+        <div>
+          <button>Create new note</button>
+        </div>
+      </form>
+    </section>    
 </body>
 </html>
+
+

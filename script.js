@@ -1,57 +1,113 @@
-function subOut(){
-    let output;
-    let chosenClass = document.getElementById("classOut").value;
-    let chosenDate = document.getElementById("dateOut").value;
-    if(chosenClass == "undefined"){
-        output = "Please select a class";
-    }else{
-        output = getNote(chosenDate, chosenClass);
+
+const form = document.querySelector('.new-note');
+const submitBtn = document.querySelector('.new-note button');
+const list = document.querySelector('ul');
+const dateInput = document.querySelector('.new-note .date')
+const classInput = document.querySelector('.new-note .class')
+const noteInput = document.querySelector('.new-note .note')
+let db
+
+window.onload = function() {
+    let request = window.indexedDB.open('notes_db', 1);
+
+    request.onerror = function() {
+        console.log('Database error');
+    };
+
+    request.onsuccess = function() {
+        console.log('database opened');
+        db = request.result;
+        displayData();
+    };
+
+    request.onupgradeneeded = function(e){
+        let db = e.target.result;
+        let objectStore = db.createObjectStore("notes_os", {keyPath: 'id', autoIncrement:true});
+        objectStore.createIndex('date', 'date', {unique:false});
+        objectStore.createIndex('cls', 'cls', {unique:false});
+        objectStore.createIndex('body', 'body', {unique:false})
+        console.log('setup complete')
+    };
+
+    form.onsubmit = addData;
+    function addData(e){
+        e.preventDefault()
+        let newItem = {date: dateInput.value, cls:classInput.value, note: noteInput.value}
+        let transaction = db.transaction(['notes_os'], 'readwrite');
+        let objectStore = transaction.objectStore('notes_os');
+        let request = objectStore.add(newItem);
+        request.onsuccess = function(){
+            noteInput.value = '';
+        }
+        transaction.oncomplete = function() {
+            console.log('database updated.');
+            displayData();
+        }
+        transaction.onerror = function() {
+            console.log('error updating database');
+        }
     }
-    return output
-}
+
+    function displayData(){
+        while(list.firstChild){
+            list.removeChild(list.firstChild);
+        }
+        
+        let objectStore = db.transaction('notes_os').objectStore('notes_os');
+        objectStore.openCursor().onsuccess=function(e){
+            let cursor = e.target.result;
+            if(cursor){
+                //create elements
+                const listItem = document.createElement('li')
+                const head = document.createElement('h3')
+                const note = document.createElement('p')
+                //link the elements togeather
+                listItem.appendChild(head)
+                listItem.appendChild(note)
+                //put block into list
+                list.appendChild(listItem)
+                //setup text for the blocks
+                head.textContent = cursor.value.date + " "+ cursor.value.cls;
+                note.textContent = cursor.value.note;
+                //create an ID atribute
+                listItem.setAttribute('data-note-id', cursor.value.id);
+                //create a delete button
+                const deleteBtn = document.createElement('button');
+                listItem.appendChild(deleteBtn);
+                deleteBtn.textContent= "Delete this note"
+                deleteBtn.onclick = deleteItem
+                //continue
+                cursor.continue()
+            }else{
+                if(!list.firstChild){
+                    const listItem = document.createElement('li');
+                    listItem.textContent = 'No Notes.';
+                    list.appendChild(listItem);
+                }
+                console.log('all notes displayed')
+            }
+        }
+    }
+
+    function deleteItem(e) {
+        let noteID = Number(e.target.parentNode.getAttribute('data-note-id'));
+        let transaction = db.transaction(['notes_os'], 'readwrite');
+        let objectStore = transaction.objectStore('notes_os');
+        let request = objectStore.delete(noteID)
+        transaction.oncomplete = function() {
+            e.target.parentNode.parentNode.removeChild(e.target.parentNode)
+            console.log(`Note ${noteID} removed`); 
+        }
+        if(!list.firstChild){
+            const listItem = document.createElement('li');
+            listItem.textContent = 'No Notes.';
+            list.appendChild(listItem);
+        }
+    }
+};
 
 function setDefaultDate(){
     let dateString = new Date()
     document.getElementById('dateIn').value = `${dateString.getFullYear()}-${dateString.getMonth()+1}-${dateString.getDate()}`
     document.getElementById('dateOut').value = `${dateString.getFullYear()}-${dateString.getMonth()+1}-${dateString.getDate()}`
-}
-
-function getNote(findDate, findClass){
-    let output = "";
-    let numOfReturns = 1;
-    for(let i=0; i < notes.length; i++){
-        if(findDate == notes[i][0]){
-            if(findClass == notes[i][1]){
-                output =  output  + "<br>" + numOfReturns + ". " + notes[i][2];
-                numOfReturns++
-            }
-        }
-    }
-    if (output == "") {output = "No notes for that class date pair &#128078"};
-    return output;
-}
-
-function subIn(){
-    let value1 = document.getElementById("dateIn").value;//day
-    let value2 = document.getElementById("classIn").value;//class
-    let note = document.getElementById("noteIn").value;//note
-    if(value2 == "undefined"){
-        document.getElementById("errorIn").innerHTML = "Please select a class."
-    }else if(note == ""){
-        document.getElementById("errorIn").innerHTML = "Please enter a note."
-    }else if(checkData(note)){
-        document.getElementById("errorIn").innerHTML = "That note already exists"
-    }else{
-        document.getElementById("errorIn").innerHTML = ""
-        notes.push([value1, value2, note]);
-    }
-}
-function checkData(checkString){
-    for(let i=0; i < notes.length; i++){
-        console.log(i)
-        if(checkString == notes[i][2]){
-            return true;
-        }
-    }
-    return false;
 }
