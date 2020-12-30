@@ -1,0 +1,12 @@
+body{
+    background-color: aquamarine;
+}
+ul{
+    margin-bottom: 20px;
+}
+form, input{
+    margin-bottom: 10px;
+}
+form, select{
+    margin-bottom: 10px;
+}
